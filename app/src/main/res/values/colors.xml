@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="charcoal">#36454f</color>
+    <color name="black">#222222</color>
+    <color name="white">#cccccc</color>
+    <color name="lightblue">#89cbee</color>
+    <color name="darkblue">#004F81</color>
+    <color name="middleblue">#4aa5d4</color>
+    <color name="red">#ff0000</color>
+    <color name="maroon">#800000</color>
+    <color name="gold">#FFFF00</color>
+    <color name="orange_crayola">#FF7538</color>
+    <color name="pink_persian">#F77FBE</color>
+    <color name="pink_lavender">#D8B2D1</color>
+    <color name="desert_sand">#EDC9AF</color>
+
+</resources>
