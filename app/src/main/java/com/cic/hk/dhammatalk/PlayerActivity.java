@@ -22,7 +22,6 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener,
         YouTubePlayer.OnFullscreenListener {
-    static private final String DEVELOPER_KEY = "AIzaSyAjMdjZ9dYJBvJA6QgILvHjghiNEDm1uv8";
     private YouTubePlayer YPlayer;
     private static final int RECOVERY_DIALOG_REQUEST = 1;
     int length =0;
@@ -52,7 +51,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                 findViewById(R.id.youtube_view);
 
 
-        youTubeView.initialize(DEVELOPER_KEY, this);
+        youTubeView.initialize(DeveloperKey.DEVELOPER_KEY, this);
 
         doLayout();
     }
@@ -91,7 +90,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RECOVERY_DIALOG_REQUEST) {
-            getYouTubePlayerProvider().initialize(DEVELOPER_KEY, this);
+            getYouTubePlayerProvider().initialize(DeveloperKey.DEVELOPER_KEY, this);
         }
     }
     protected YouTubePlayer.Provider getYouTubePlayerProvider() {

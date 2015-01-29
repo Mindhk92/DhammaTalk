@@ -1,6 +1,5 @@
 package com.cic.hk.dhammatalk;
 
-import android.app.ActionBar;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -8,29 +7,21 @@ import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -47,6 +38,7 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements MyTaskInterface{
 
+    ListView myListView;
     Button btnNewest, btnPopular;
 
     String base_urlku = "http://113.212.160.12/wihara/";
@@ -101,6 +93,12 @@ public class MainActivity extends ActionBarActivity implements MyTaskInterface{
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        ((VideoListBaseAdapter) myListView.getAdapter()).releaseLoaders();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -218,7 +216,7 @@ public class MainActivity extends ActionBarActivity implements MyTaskInterface{
     private void initListView(ArrayList<ItemDetailVideoList> details) {
 
 
-        ListView myListView = (ListView) findViewById(R.id.listdhammatalk);
+        myListView = (ListView) findViewById(R.id.listdhammatalk);
         myListView.setAdapter(new VideoListBaseAdapter(this, details));
 
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -256,7 +254,7 @@ public class MainActivity extends ActionBarActivity implements MyTaskInterface{
 
             HttpPost httpPost = new HttpPost("http://113.212.160.12/wihara/setViewCount.php");
 
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+            List<NameValuePair> nameValuePairs = new ArrayList<>(1);
             nameValuePairs.add(new BasicNameValuePair("id_video", ""+this.ID_VIDEO));
 
             try {

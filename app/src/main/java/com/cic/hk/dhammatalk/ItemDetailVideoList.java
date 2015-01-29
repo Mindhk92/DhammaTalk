@@ -9,6 +9,8 @@ public class ItemDetailVideoList {
     private int id;
     private String video_url;
     private String image_url;
+
+
     public void setTitle(String t){
         this.title = t;
     }
