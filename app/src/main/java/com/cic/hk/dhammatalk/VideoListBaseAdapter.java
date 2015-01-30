@@ -1,6 +1,8 @@
 package com.cic.hk.dhammatalk;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,16 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,6 +88,8 @@ public class VideoListBaseAdapter extends BaseAdapter {
             holder.image_url.initialize(DeveloperKey.DEVELOPER_KEY, thumbnailListener);
             holder.title_url = (TextView) convertView.findViewById(R.id.title_video);
             holder.video_url = (TextView) convertView.findViewById(R.id.url_video);
+            holder.upload_date = (TextView) convertView.findViewById(R.id.upload_date);
+            holder.view_count = (TextView) convertView.findViewById(R.id.view_count);
             convertView.setTag(holder);
         }else{
 
@@ -96,6 +110,13 @@ public class VideoListBaseAdapter extends BaseAdapter {
         //ImageLoader.getInstance().displayImage(list.get(position).getImage_url(), holder.image_url);
         holder.title_url.setText(list.get(position).getTitle());
         holder.video_url.setText(list.get(position).getVideo_url());
+
+        //HttpHost targetHost = new HttpHost("113.212.160.12");
+        //HttpGet targetGet = new HttpGet("/wihara/getListVideo.php");
+        //Log.d("urlku", base_urlku+ (btnNewest.isEnabled()?"getListVideoByPopular.php":"getListVideoByNewest.php"));
+        // Log.d(TAG, "Hello!");
+       new RetrieveYoutubeVideoDetail(list.get(position).getVideo_url(),holder.view_count).execute();
+
         return convertView;
     }
 
@@ -103,8 +124,66 @@ public class VideoListBaseAdapter extends BaseAdapter {
         YouTubeThumbnailView image_url;
         TextView title_url;
         TextView video_url;
+        TextView upload_date;
+        TextView view_count;
     }
+    class RetrieveYoutubeVideoDetail extends AsyncTask<String, Void, String> {
 
+        private Exception exception;
+
+        private String videoID= "";
+        private TextView viewCount;
+
+        public RetrieveYoutubeVideoDetail(String v, TextView tv){
+            this.videoID = v;
+            this.viewCount = tv;
+        }
+
+        protected String doInBackground(String... urls) {
+            String txtResult = "";
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            String youtubeJSON = "https://gdata.youtube.com/feeds/api/videos/"+ this.videoID +"?v=2&alt=json";
+            Log.d("youtubeJSON", youtubeJSON);
+            HttpPost httppost = new HttpPost(youtubeJSON);
+            try {
+                HttpResponse response = httpClient.execute(httppost);
+                //response = httpClient.execute(targetHost, targetGet);
+                HttpEntity entity = response.getEntity();
+                String htmlResponse = EntityUtils.toString(entity);
+                txtResult = htmlResponse;
+                //  Log.d(TAG, ""+response);
+
+            } catch (ClientProtocolException e) {
+                // TODO Auto-generated catch block
+                Log.e("ClientProtocolException", e.getMessage());
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                Log.e("IOException", e.getMessage());
+                e.printStackTrace();
+            }
+            return txtResult;
+        }
+
+        protected void onPostExecute(String htmlResponse) {
+
+            Log.d("onPostExecute(htmlResponse)", htmlResponse);
+            try {
+
+                JSONObject mainJsonObject = new JSONObject(htmlResponse);
+                JSONObject entryJsonObject = mainJsonObject.getJSONObject("entry");
+                JSONObject ytstatisticsJsonObject = entryJsonObject.getJSONObject("yt$statistics");
+                long viewcountJsonObject = ytstatisticsJsonObject.getLong("viewCount");
+
+                this.viewCount.setText(viewcountJsonObject+"");
+                //  Log.d(TAG, ""+response);
+
+            } catch (JSONException e) {
+                Log.e("JSONException", e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
     private final class ThumbnailListener implements
             YouTubeThumbnailView.OnInitializedListener,
             YouTubeThumbnailLoader.OnThumbnailLoadedListener {

@@ -1,5 +1,7 @@
 package com.cic.hk.dhammatalk;
 
+import java.util.Date;
+
 /**
  * Created by user on 1/15/2015.
  */
@@ -9,6 +11,8 @@ public class ItemDetailVideoList {
     private int id;
     private String video_url;
     private String image_url;
+    private Date upload_date;
+    private long view_count;
 
 
     public void setTitle(String t){
@@ -38,4 +42,10 @@ public class ItemDetailVideoList {
     public int getID(){
         return this.id;
     }
+
+    public void setUploadDate(Date d) {this.upload_date = d;}
+    public Date getUploadDate(){ return this.upload_date;}
+
+    public void setViewCount(long v) { this.view_count = v;}
+    public long getViewCount() { return  this.view_count;}
 }

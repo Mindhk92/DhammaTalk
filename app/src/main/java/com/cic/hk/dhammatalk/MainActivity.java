@@ -192,6 +192,7 @@ public class MainActivity extends ActionBarActivity implements MyTaskInterface{
                 HttpEntity entity = response.getEntity();
                 String htmlResponse = EntityUtils.toString(entity);
                 txtResult = htmlResponse;
+
                 //  Log.d(TAG, ""+response);
 
             } catch (ClientProtocolException e) {
