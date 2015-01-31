@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -26,7 +27,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     private static final int RECOVERY_DIALOG_REQUEST = 1;
     int length =0;
 
-    private LinearLayout baseLayout;
+    private FrameLayout baseLayout;
 
     private View otherViews;
     ProgressDialog pDialog;
@@ -42,7 +43,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-        baseLayout = (LinearLayout) findViewById(R.id.player_activity_main_layout);
+        baseLayout = (FrameLayout) findViewById(R.id.player_activity_main_layout);
         otherViews = findViewById(R.id.other_views);
 
         Intent i = getIntent();
@@ -50,7 +51,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
          youTubeView = (YouTubePlayerView)
                 findViewById(R.id.youtube_view);
 
-
+        youTubeView.bringToFront();
         youTubeView.initialize(DeveloperKey.DEVELOPER_KEY, this);
 
         doLayout();
@@ -100,7 +101,9 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                         YouTubePlayer player, boolean wasRestored) {
         this.YPlayer = player;
-        player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
+        player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
+
+        //player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         player.setOnFullscreenListener(this);
         if (!wasRestored) {
             player.cueVideo(this.videoURL);
@@ -114,8 +117,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     }
 
     private void doLayout() {
-        LinearLayout.LayoutParams playerParams =
-                (LinearLayout.LayoutParams) youTubeView.getLayoutParams();
+        FrameLayout.LayoutParams playerParams =
+                (FrameLayout.LayoutParams) youTubeView.getLayoutParams();
         if (fullscreen) {
             playerParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
             playerParams.height = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -128,14 +131,14 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                 playerParams.width = otherViewsParams.width = 0;
                 playerParams.height = WRAP_CONTENT;
                 otherViewsParams.height = MATCH_PARENT;
-                playerParams.weight = 1;
-                baseLayout.setOrientation(LinearLayout.HORIZONTAL);
+                //playerParams.weight = 1;
+                //baseLayout.setOrientation(LinearLayout.HORIZONTAL);
             } else {
                 playerParams.width = otherViewsParams.width = MATCH_PARENT;
                 playerParams.height = WRAP_CONTENT;
-                playerParams.weight = 0;
+                //playerParams.weight = 0;
                 otherViewsParams.height = 0;
-                baseLayout.setOrientation(LinearLayout.VERTICAL);
+                //baseLayout.setOrientation(LinearLayout.VERTICAL);
             }
         }
     }

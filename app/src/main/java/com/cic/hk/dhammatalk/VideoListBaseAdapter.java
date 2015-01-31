@@ -16,6 +16,7 @@ import com.google.android.youtube.player.YouTubeThumbnailView;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -23,7 +24,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -115,7 +119,7 @@ public class VideoListBaseAdapter extends BaseAdapter {
         //HttpGet targetGet = new HttpGet("/wihara/getListVideo.php");
         //Log.d("urlku", base_urlku+ (btnNewest.isEnabled()?"getListVideoByPopular.php":"getListVideoByNewest.php"));
         // Log.d(TAG, "Hello!");
-       new RetrieveYoutubeVideoDetail(list.get(position).getVideo_url(),holder.view_count).execute();
+       new RetrieveYoutubeVideoDetail(list.get(position).getVideo_url(),holder.view_count, holder.upload_date).execute();
 
         return convertView;
     }
@@ -133,18 +137,20 @@ public class VideoListBaseAdapter extends BaseAdapter {
 
         private String videoID= "";
         private TextView viewCount;
+        private TextView publishedDate;
 
-        public RetrieveYoutubeVideoDetail(String v, TextView tv){
+        public RetrieveYoutubeVideoDetail(String v, TextView tv1, TextView tv2){
             this.videoID = v;
-            this.viewCount = tv;
+            this.viewCount = tv1;
+            this.publishedDate = tv2;
         }
 
         protected String doInBackground(String... urls) {
             String txtResult = "";
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            String youtubeJSON = "https://gdata.youtube.com/feeds/api/videos/"+ this.videoID +"?v=2&alt=json";
+            String youtubeJSON = "http://gdata.youtube.com/feeds/api/videos/"+ this.videoID +"?v=1&alt=json";
             Log.d("youtubeJSON", youtubeJSON);
-            HttpPost httppost = new HttpPost(youtubeJSON);
+            HttpGet httppost = new HttpGet(youtubeJSON);
             try {
                 HttpResponse response = httpClient.execute(httppost);
                 //response = httpClient.execute(targetHost, targetGet);
@@ -172,6 +178,23 @@ public class VideoListBaseAdapter extends BaseAdapter {
 
                 JSONObject mainJsonObject = new JSONObject(htmlResponse);
                 JSONObject entryJsonObject = mainJsonObject.getJSONObject("entry");
+
+                JSONObject publishedJsonObject = entryJsonObject.getJSONObject("published");
+                String publishedDate = publishedJsonObject.getString("$t");//.substring(0,10);
+                SimpleDateFormat  format = new SimpleDateFormat("yyyy, dd-MM");
+                try {
+                    //String strCurrentDate = "Wed, 18 Apr 2012 07:55:29 +0000";
+                    format = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z");
+                    Date newDate = format.parse(publishedDate);
+
+                    format = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                    String date = format.format(newDate);
+                    this.publishedDate.setText(date);
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
                 JSONObject ytstatisticsJsonObject = entryJsonObject.getJSONObject("yt$statistics");
                 long viewcountJsonObject = ytstatisticsJsonObject.getLong("viewCount");
 
