@@ -7,15 +7,6 @@
     tools:context="com.cic.hk.dhammatalk.PlayerActivity"
     android:orientation="vertical">
 
-    <com.google.android.youtube.player.YouTubePlayerView
-
-        android:id="@+id/youtube_view"
-
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        />
     <RelativeLayout
         android:id="@+id/other_views"
         android:layout_width="match_parent"
@@ -46,8 +37,18 @@
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:gravity="center_horizontal"
-           />
+            />
     </RelativeLayout>
+
+    <com.google.android.youtube.player.YouTubePlayerView
+
+        android:id="@+id/youtube_view"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        />
 
 </FrameLayout>
 

@@ -17,7 +17,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
+//import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
@@ -42,7 +42,7 @@ public class VideoListBaseAdapter extends BaseAdapter {
     private final ThumbnailListener thumbnailListener;
 
     public VideoListBaseAdapter(Context context, ArrayList<ItemDetailVideoList> result){
-        this.list = result;
+        list = result;
         this.l_Inflater = LayoutInflater.from(context);
 //        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
 //                .threadPriority(Thread.NORM_PRIORITY - 2)
@@ -55,7 +55,7 @@ public class VideoListBaseAdapter extends BaseAdapter {
 //                .build();
 //        ImageLoader.getInstance().init(config);
 
-        thumbnailViewToLoaderMap = new HashMap<YouTubeThumbnailView, YouTubeThumbnailLoader>();
+        thumbnailViewToLoaderMap = new HashMap<>();
         thumbnailListener = new ThumbnailListener();
     }
 
@@ -87,7 +87,7 @@ public class VideoListBaseAdapter extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.itemdetail_videolist, null);
             holder = new ViewHolder();
             holder.image_url = (YouTubeThumbnailView) convertView.findViewById(R.id.gambar_video);
-            YouTubeThumbnailLoader loader = thumbnailViewToLoaderMap.get(holder.image_url);
+//            YouTubeThumbnailLoader loader = thumbnailViewToLoaderMap.get(holder.image_url);
             holder.image_url.setTag(video_url);
             holder.image_url.initialize(DeveloperKey.DEVELOPER_KEY, thumbnailListener);
             holder.title_url = (TextView) convertView.findViewById(R.id.title_video);
@@ -133,7 +133,7 @@ public class VideoListBaseAdapter extends BaseAdapter {
     }
     class RetrieveYoutubeVideoDetail extends AsyncTask<String, Void, String> {
 
-        private Exception exception;
+//        private Exception exception;
 
         private String videoID= "";
         private TextView viewCount;
@@ -155,8 +155,7 @@ public class VideoListBaseAdapter extends BaseAdapter {
                 HttpResponse response = httpClient.execute(httppost);
                 //response = httpClient.execute(targetHost, targetGet);
                 HttpEntity entity = response.getEntity();
-                String htmlResponse = EntityUtils.toString(entity);
-                txtResult = htmlResponse;
+                txtResult = EntityUtils.toString(entity);
                 //  Log.d(TAG, ""+response);
 
             } catch (ClientProtocolException e) {
@@ -180,15 +179,16 @@ public class VideoListBaseAdapter extends BaseAdapter {
                 JSONObject entryJsonObject = mainJsonObject.getJSONObject("entry");
 
                 JSONObject publishedJsonObject = entryJsonObject.getJSONObject("published");
-                String publishedDate = publishedJsonObject.getString("$t");//.substring(0,10);
-                SimpleDateFormat  format = new SimpleDateFormat("yyyy, dd-MM");
+                String publishedDate = publishedJsonObject.getString("$t").substring(0,10);
+                Log.d("publishedDate", publishedDate);
+                SimpleDateFormat  format = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     //String strCurrentDate = "Wed, 18 Apr 2012 07:55:29 +0000";
-                    format = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z");
                     Date newDate = format.parse(publishedDate);
 
-                    format = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                    format = new SimpleDateFormat("yyyy, MMM dd");
                     String date = format.format(newDate);
+
                     this.publishedDate.setText(date);
                 } catch (ParseException e) {
                     // TODO Auto-generated catch block

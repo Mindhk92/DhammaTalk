@@ -1,6 +1,6 @@
 package com.cic.hk.dhammatalk;
 
-import android.app.ProgressDialog;
+//import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -9,9 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+//import android.widget.LinearLayout;
 import android.widget.Toast;
-import android.widget.VideoView;
+//import android.widget.VideoView;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -23,19 +23,19 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener,
         YouTubePlayer.OnFullscreenListener {
-    private YouTubePlayer YPlayer;
+    //private YouTubePlayer YPlayer;
     private static final int RECOVERY_DIALOG_REQUEST = 1;
-    int length =0;
+   // int length =0;
 
-    private FrameLayout baseLayout;
+//    /private FrameLayout baseLayout;
 
     private View otherViews;
-    ProgressDialog pDialog;
-    VideoView videoView;
+   // ProgressDialog pDialog;
+//    VideoView videoView;
     YouTubePlayerView youTubeView;
     //    String videoURL = "rtsp://103.21.95.50:1935/vod/";
     String videoURL = "";
-    String title = "";
+//    String title = "";
 
     private boolean fullscreen;
 
@@ -43,7 +43,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-        baseLayout = (FrameLayout) findViewById(R.id.player_activity_main_layout);
+//        baseLayout = (FrameLayout) findViewById(R.id.player_activity_main_layout);
         otherViews = findViewById(R.id.other_views);
 
         Intent i = getIntent();
@@ -83,7 +83,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
             errorReason.getErrorDialog(this, RECOVERY_DIALOG_REQUEST).show();
         } else {
             String errorMessage = String.format(
-                    "There was an error initializing the YouTubePlayer",
+                    "There was an error initializing the YouTubePlayer %s",
                     errorReason.toString());
             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
         }
@@ -100,7 +100,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                         YouTubePlayer player, boolean wasRestored) {
-        this.YPlayer = player;
+//        this.YPlayer = player;
         player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
 
         //player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
@@ -120,8 +120,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         FrameLayout.LayoutParams playerParams =
                 (FrameLayout.LayoutParams) youTubeView.getLayoutParams();
         if (fullscreen) {
-            playerParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
-            playerParams.height = LinearLayout.LayoutParams.MATCH_PARENT;
+            playerParams.width = FrameLayout.LayoutParams.MATCH_PARENT;
+            playerParams.height = FrameLayout.LayoutParams.MATCH_PARENT;
 
             otherViews.setVisibility(View.GONE);
         } else {
