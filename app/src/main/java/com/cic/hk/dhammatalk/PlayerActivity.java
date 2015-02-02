@@ -101,7 +101,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                         YouTubePlayer player, boolean wasRestored) {
 //        this.YPlayer = player;
-        player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
+        player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI);
 
         //player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         player.setOnFullscreenListener(this);
@@ -119,17 +119,19 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     private void doLayout() {
         FrameLayout.LayoutParams playerParams =
                 (FrameLayout.LayoutParams) youTubeView.getLayoutParams();
+
         if (fullscreen) {
             playerParams.width = FrameLayout.LayoutParams.MATCH_PARENT;
             playerParams.height = FrameLayout.LayoutParams.MATCH_PARENT;
 
-            otherViews.setVisibility(View.GONE);
+//            otherViews.setVisibility(View.GONE);
         } else {
-            otherViews.setVisibility(View.VISIBLE);
+//            otherViews.setVisibility(View.VISIBLE);
             ViewGroup.LayoutParams otherViewsParams = otherViews.getLayoutParams();
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                playerParams.width = otherViewsParams.width = 0;
+                playerParams.width = MATCH_PARENT;
                 playerParams.height = WRAP_CONTENT;
+                otherViewsParams.width = 0;
                 otherViewsParams.height = MATCH_PARENT;
                 //playerParams.weight = 1;
                 //baseLayout.setOrientation(LinearLayout.HORIZONTAL);

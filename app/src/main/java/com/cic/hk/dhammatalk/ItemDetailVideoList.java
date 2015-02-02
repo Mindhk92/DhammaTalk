@@ -13,6 +13,7 @@ public class ItemDetailVideoList {
     private String image_url;
     private Date upload_date;
     private long view_count;
+    private String author;
 
 
     public void setTitle(String t){
@@ -32,9 +33,9 @@ public class ItemDetailVideoList {
     public void setImage_url(String i){
         this.image_url = i;
     }
-    public String getImage_url(){
-        return base_address_image + this.image_url;
-    }
+//    public String getImage_url(){
+//        return base_address_image + this.image_url;
+//    }
 
     public void setID(int i){
         this.id= i;
@@ -43,9 +44,16 @@ public class ItemDetailVideoList {
         return this.id;
     }
 
-    public void setUploadDate(Date d) {this.upload_date = d;}
-    public Date getUploadDate(){ return this.upload_date;}
-
-    public void setViewCount(long v) { this.view_count = v;}
-    public long getViewCount() { return  this.view_count;}
+//    public void setUploadDate(Date d) {this.upload_date = d;}
+//    public Date getUploadDate(){ return this.upload_date;}
+//
+//    public void setViewCount(long v) { this.view_count = v;}
+//    public long getViewCount() { return  this.view_count;}
+//
+//    public void setAuthor(String a){
+//        this.author = a;
+//    }
+//    public String getAuthor(){
+//        return this.author;
+//    }
 }

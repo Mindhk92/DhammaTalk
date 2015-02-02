@@ -11,7 +11,8 @@
         android:id="@+id/other_views"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:gravity="bottom"
+        android:visibility="visible">
 
         <VideoView
             android:id= "@+id/MyPlayer"
@@ -19,6 +20,7 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             />
         <ImageView
             android:id= "@+id/MyPreview"
@@ -37,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:gravity="center_horizontal"
+            android:text="LALALA"
             />
     </RelativeLayout>
 
@@ -47,7 +50,7 @@
         android:layout_width="wrap_content"
 
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="top"
         />
 
 </FrameLayout>

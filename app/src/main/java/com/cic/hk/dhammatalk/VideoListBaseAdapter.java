@@ -20,6 +20,7 @@ import org.apache.http.client.methods.HttpGet;
 //import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -91,7 +92,7 @@ public class VideoListBaseAdapter extends BaseAdapter {
             holder.image_url.setTag(video_url);
             holder.image_url.initialize(DeveloperKey.DEVELOPER_KEY, thumbnailListener);
             holder.title_url = (TextView) convertView.findViewById(R.id.title_video);
-            holder.video_url = (TextView) convertView.findViewById(R.id.url_video);
+            holder.author = (TextView) convertView.findViewById(R.id.itemdetail_videolist_author);
             holder.upload_date = (TextView) convertView.findViewById(R.id.upload_date);
             holder.view_count = (TextView) convertView.findViewById(R.id.view_count);
             convertView.setTag(holder);
@@ -112,14 +113,14 @@ public class VideoListBaseAdapter extends BaseAdapter {
             loader.setVideo(video_url);
         }
         //ImageLoader.getInstance().displayImage(list.get(position).getImage_url(), holder.image_url);
-        holder.title_url.setText(list.get(position).getTitle());
-        holder.video_url.setText(list.get(position).getVideo_url());
+        //holder.title_url.setText(list.get(position).getTitle());
+        //holder.author.setText(list.get(position).getVideo_url());
 
         //HttpHost targetHost = new HttpHost("113.212.160.12");
         //HttpGet targetGet = new HttpGet("/wihara/getListVideo.php");
         //Log.d("urlku", base_urlku+ (btnNewest.isEnabled()?"getListVideoByPopular.php":"getListVideoByNewest.php"));
         // Log.d(TAG, "Hello!");
-       new RetrieveYoutubeVideoDetail(list.get(position).getVideo_url(),holder.view_count, holder.upload_date).execute();
+       new RetrieveYoutubeVideoDetail(list.get(position).getVideo_url(),holder).execute();
 
         return convertView;
     }
@@ -127,7 +128,7 @@ public class VideoListBaseAdapter extends BaseAdapter {
     static class ViewHolder{
         YouTubeThumbnailView image_url;
         TextView title_url;
-        TextView video_url;
+        TextView author;
         TextView upload_date;
         TextView view_count;
     }
@@ -136,13 +137,14 @@ public class VideoListBaseAdapter extends BaseAdapter {
 //        private Exception exception;
 
         private String videoID= "";
-        private TextView viewCount;
-        private TextView publishedDate;
+//        private TextView viewCount;
+//        private TextView publishedDate;
+//        private TextView author;
+        private ViewHolder view;
 
-        public RetrieveYoutubeVideoDetail(String v, TextView tv1, TextView tv2){
+        public RetrieveYoutubeVideoDetail(String v,     ViewHolder vh){
             this.videoID = v;
-            this.viewCount = tv1;
-            this.publishedDate = tv2;
+            this.view = vh;
         }
 
         protected String doInBackground(String... urls) {
@@ -189,7 +191,7 @@ public class VideoListBaseAdapter extends BaseAdapter {
                     format = new SimpleDateFormat("yyyy, MMM dd");
                     String date = format.format(newDate);
 
-                    this.publishedDate.setText(date);
+                    this.view.upload_date.setText(date);
                 } catch (ParseException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -197,9 +199,17 @@ public class VideoListBaseAdapter extends BaseAdapter {
 
                 JSONObject ytstatisticsJsonObject = entryJsonObject.getJSONObject("yt$statistics");
                 long viewcountJsonObject = ytstatisticsJsonObject.getLong("viewCount");
+                this.view.view_count.setText(viewcountJsonObject+"");
 
-                this.viewCount.setText(viewcountJsonObject+"");
+                JSONArray authorJsonObject = entryJsonObject.getJSONArray("author");
+                JSONObject nameJsonObject = authorJsonObject.getJSONObject(0).getJSONObject("name");
+                String authorname = nameJsonObject.getString("$t");
+                this.view.author.setText("By: "+authorname);
                 //  Log.d(TAG, ""+response);
+
+                JSONObject titleJsonObject = entryJsonObject.getJSONObject("title");
+                String title = titleJsonObject.getString("$t");
+                this.view.title_url.setText(title);
 
             } catch (JSONException e) {
                 Log.e("JSONException", e.getMessage());

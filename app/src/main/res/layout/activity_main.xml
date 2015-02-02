@@ -76,7 +76,8 @@
         android:id="@+id/buddha"
         android:layout_centerInParent="true"
         android:layout_below="@id/linearLayout"
-        android:src="@drawable/buddha"/>
+        android:src="@drawable/buddha"
+        android:visibility="gone"/>
 
 
     <LinearLayout
