@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 
 import org.apache.http.HttpEntity;
@@ -233,6 +234,11 @@ public class MainActivity extends ActionBarActivity implements MyTaskInterface{
                 Intent myIntent = new Intent (MainActivity.this, PlayerActivity.class);
                 myIntent.putExtra("filevideo", obj_detail.getVideo_url());
                 myIntent.putExtra("titlevideo", obj_detail.getTitle());
+
+                TextView tvDescription = (TextView) view.findViewById(R.id.itemdetail_videolist_description);
+                String description = tvDescription.getText().toString();
+                myIntent.putExtra("descriptionvideo", description);
+
                 startActivity(myIntent);
             }
         });

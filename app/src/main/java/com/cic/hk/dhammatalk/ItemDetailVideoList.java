@@ -14,6 +14,7 @@ public class ItemDetailVideoList {
     private Date upload_date;
     private long view_count;
     private String author;
+    private String description;
 
 
     public void setTitle(String t){
@@ -56,4 +57,11 @@ public class ItemDetailVideoList {
 //    public String getAuthor(){
 //        return this.author;
 //    }
+    public void setDescription(String d){
+        this.description = d;
+    }
+    public String getDescription(){
+        return this.description;
+    }
+
 }

@@ -137,7 +137,7 @@ public class PlayerActivity_lama extends ActionBarActivity {
         TextView tvTitleVideo = (TextView) findViewById(R.id.tvTitleVideo);
         tvTitleVideo.setText(this.title);
 
-        videoView = (VideoView) findViewById(R.id.MyPlayer);
+//        videoView = (VideoView) findViewById(R.id.MyPlayer);
 
         pDialog = new ProgressDialog(PlayerActivity_lama.this);
         pDialog.setTitle(this.title);

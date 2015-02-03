@@ -95,6 +95,7 @@ public class VideoListBaseAdapter extends BaseAdapter {
             holder.author = (TextView) convertView.findViewById(R.id.itemdetail_videolist_author);
             holder.upload_date = (TextView) convertView.findViewById(R.id.upload_date);
             holder.view_count = (TextView) convertView.findViewById(R.id.view_count);
+            holder.description = (TextView) convertView.findViewById(R.id.itemdetail_videolist_description);
             convertView.setTag(holder);
         }else{
 
@@ -131,6 +132,7 @@ public class VideoListBaseAdapter extends BaseAdapter {
         TextView author;
         TextView upload_date;
         TextView view_count;
+        TextView description;
     }
     class RetrieveYoutubeVideoDetail extends AsyncTask<String, Void, String> {
 
@@ -210,6 +212,13 @@ public class VideoListBaseAdapter extends BaseAdapter {
                 JSONObject titleJsonObject = entryJsonObject.getJSONObject("title");
                 String title = titleJsonObject.getString("$t");
                 this.view.title_url.setText(title);
+
+                JSONObject contentJsonObject = entryJsonObject.getJSONObject("content");
+                String content = contentJsonObject.getString("$t");
+                 this.view.description.setText(content);
+
+
+
 
             } catch (JSONException e) {
                 Log.e("JSONException", e.getMessage());

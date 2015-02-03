@@ -9,5 +9,6 @@
     <string name="action_profile">Tes Profil</string>
     <string name="hello_world">Hello World</string>
     <string name="search_hint">Topik</string>
+    <string name="title_activity_youtube_player_view">Video by Youtube</string>
 
 </resources>

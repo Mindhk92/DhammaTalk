@@ -4,12 +4,15 @@ package com.cic.hk.dhammatalk;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 //import android.widget.LinearLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 //import android.widget.VideoView;
 
@@ -27,7 +30,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     private static final int RECOVERY_DIALOG_REQUEST = 1;
    // int length =0;
 
-//    /private FrameLayout baseLayout;
+    private LinearLayout baseLayout;
 
     private View otherViews;
    // ProgressDialog pDialog;
@@ -35,24 +38,35 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     YouTubePlayerView youTubeView;
     //    String videoURL = "rtsp://103.21.95.50:1935/vod/";
     String videoURL = "";
-//    String title = "";
+    String title = "";
+    String description = "";
 
-    private boolean fullscreen;
+    private boolean fullscreen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-//        baseLayout = (FrameLayout) findViewById(R.id.player_activity_main_layout);
-        otherViews = findViewById(R.id.other_views);
+
+        baseLayout = (LinearLayout) findViewById(R.id.player_activity_main_layout);
 
         Intent i = getIntent();
         this.videoURL += i.getExtras().getString("filevideo");
+        this.title = i.getExtras().getString("titlevideo");
+        this.description = i.getExtras().getString("descriptionvideo");
          youTubeView = (YouTubePlayerView)
                 findViewById(R.id.youtube_view);
 
-        youTubeView.bringToFront();
+        //youTubeView.bringToFront();
         youTubeView.initialize(DeveloperKey.DEVELOPER_KEY, this);
+        otherViews = findViewById(R.id.other_views);
+
+        TextView tvTitleVideo = (TextView) findViewById(R.id.tvTitleVideo);
+        tvTitleVideo.setText(title);
+
+        TextView tvDescriptionVideo = (TextView) findViewById(R.id.tvDescriptionVideo);
+        tvDescriptionVideo.setText(this.description);
+        tvDescriptionVideo.setMovementMethod(new ScrollingMovementMethod());
 
         doLayout();
     }
@@ -117,30 +131,29 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     }
 
     private void doLayout() {
-        FrameLayout.LayoutParams playerParams =
-                (FrameLayout.LayoutParams) youTubeView.getLayoutParams();
+        LinearLayout.LayoutParams playerParams =
+                (LinearLayout.LayoutParams) youTubeView.getLayoutParams();
 
         if (fullscreen) {
-            playerParams.width = FrameLayout.LayoutParams.MATCH_PARENT;
-            playerParams.height = FrameLayout.LayoutParams.MATCH_PARENT;
+            playerParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+            playerParams.height = LinearLayout.LayoutParams.MATCH_PARENT;
 
-//            otherViews.setVisibility(View.GONE);
+            otherViews.setVisibility(View.GONE);
         } else {
-//            otherViews.setVisibility(View.VISIBLE);
+            otherViews.setVisibility(View.VISIBLE);
             ViewGroup.LayoutParams otherViewsParams = otherViews.getLayoutParams();
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                playerParams.width = MATCH_PARENT;
+                playerParams.width = otherViewsParams.width = 0;
                 playerParams.height = WRAP_CONTENT;
-                otherViewsParams.width = 0;
                 otherViewsParams.height = MATCH_PARENT;
-                //playerParams.weight = 1;
-                //baseLayout.setOrientation(LinearLayout.HORIZONTAL);
+                playerParams.weight = 1;
+                baseLayout.setOrientation(LinearLayout.HORIZONTAL);
             } else {
                 playerParams.width = otherViewsParams.width = MATCH_PARENT;
                 playerParams.height = WRAP_CONTENT;
-                //playerParams.weight = 0;
+                playerParams.weight = 0;
                 otherViewsParams.height = 0;
-                //baseLayout.setOrientation(LinearLayout.VERTICAL);
+                baseLayout.setOrientation(LinearLayout.VERTICAL);
             }
         }
     }
